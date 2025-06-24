@@ -10,6 +10,10 @@ load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 DB_PATH = "warnings.db"
 
+# Check if token is available
+if not TOKEN:
+    raise ValueError("DISCORD_TOKEN environment variable is required. Please set it in your .env file.")
+
 # Initialize SQLite database and warnings table (scoped by guild)
 async def init_db():
     async with aiosqlite.connect(DB_PATH) as db:
@@ -72,7 +76,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    # Ignore bot’s own messages
+    # Ignore bot's own messages
     if message.author == client.user or not message.guild:
         return
 
